@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+        .wrap {
+            width: 50%;
+            height: 50%;
+            background-color: #eeeeee;
+            margin: 0 auto;
+        }
+        .box {
+            width: 50%;
+            height: 50%;
+            background-color: burlywood;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 600%;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="box">
+
+        </div>
+    </div>
+</body>
+<script>
+    let count = 1
+    const box = document.getElementsByClassName('box')[0];
+    box.innerText = count;
+
+    // 时间间隔的方法
+    const throttle1 = function(func, wait) {
+        let previous = 0;
+        return function() {
+            const context = this;
+            const args = arguments;
+            const now = Date.now();
+            if((now - previous) > wait) {
+                func.apply(context, arguments)
+                previous = now;
+            }
+        }
+    }
+
+    // setTimeOut方法
+    const throttle2 = function(func, wait) {
+        let timeout;
+        return function() {
+            const context = this;
+            const args = arguments;
+            if(!timeout) {
+                console.log(123123);
+                timeout = setTimeout(function() {
+                    timeout = null
+                    func.apply(context, args) 
+                }, wait)
+            }
+        }
+    }
+
+    // 二者结合
+    const throttle3 = function(func, wait) {
+        let previous = 0, timeout, context, args;
+        const later = function() {
+            previous = Date.now(); // 每一轮更新previous 才会让下面的remaining > 0
+            timeout = null;
+            func.apply(context, args) 
+        }
+        return function() {
+            context = this;
+            args = arguments;
+            const now = Date.now();
+            const remaining = wait - (now - previous);
+            if(remaining < 0) { // 只有第一次触发onmousemove事件的时候满足条件
+                if(timeout){
+                    clearTimeout(timeout);
+                    timeout = null
+                }
+                func.apply(context, arguments)
+                previous = now;
+            } else if(!timeout) {
+                timeout = setTimeout(later, wait);
+            }
+        }
+    }
+
+    const getAction = function() {
+        box.innerHTML = ++ count ;
+    }
+    // box.onmousemove = getAction
+    box.onmousemove = throttle3(getAction, 1000);
+</script>
+</html>

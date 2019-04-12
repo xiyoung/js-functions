@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    const arr = [1, 4, 3, 4, 1, 5]
+    // includes
+    const unique1 = function(arr) {
+        if(!Array.isArray(arr)) {
+            return;
+        }
+        const newArr = [];
+        arr.forEach(item => {
+            if(!newArr.includes(item)) {
+                newArr.push(item);
+            }
+        })
+        return newArr;
+    }
+    console.log(unique1(arr));
+    // filter
+    const unique2 = function(arr) {
+        if(!Array.isArray(arr)) { // 亦可换为indexOf
+            return;
+        }
+        return arr.filter((item, index, array) => array.indexOf(item) === index)
+    }
+    console.log(unique2(arr));
+    // 先sort
+    const unique3 = function(arr) {
+        if(!Array.isArray(arr)) {
+            return;
+        }
+        const sortArr = arr.sort(); // 相同的元素会到一起
+        const newArr = [];
+        let temItem;
+        for(let i = 0; i < sortArr.length; i ++) {
+            if(!i || sortArr[i] !== temItem) {
+                newArr.push(sortArr[i]);
+            }
+            temItem = sortArr[i];
+        }
+        return newArr;
+    }
+    console.log(unique3(arr));
+    // new Set() 或 数组据扩展
+    const unique4 = function(arr) {
+        if(!Array.isArray(arr)) {
+            return;
+        }
+        return Array.from(new Set(arr)); // 或[...new Set(arr)]
+    }
+    console.log(unique4(arr));
+
+
+
+</script>
+</html>

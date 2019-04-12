@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    const arrPayload = [1, 2, [1, 2], ['a', 10, [32, 100]]];
+    const objPayload = {
+        a: 1,
+        b: 2,
+        c: {
+            w: 'name',
+            m: 'young',
+            liu: {
+                age: 16,
+                grade: '六'
+            }
+        }
+    }
+    const deepClone = function(obj) {
+        const newObj = obj instanceof Array ? [] : {};
+        for(item in obj) {
+            if(obj.hasOwnProperty(item)) {
+                newObj[item] = typeof obj[item] === 'object' ? deepClone(obj[item]) : obj[item]
+            }
+        }
+        return newObj
+    }
+    console.log(deepClone(arrPayload))
+    console.log(deepClone(objPayload))
+</script>
+</html>
